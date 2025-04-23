@@ -1,3 +1,10 @@
 <template>
-    
+    <lightning-card title="User Info Form" icon-name="custom:custom63">
+        <div class="slds-m-around_medium">
+            <lightning-input label="Full Name" value={name} onchange={handleNameChange}></lightning-input>
+            <lightning-input type="email" label="Email" value={email} onchange={handleEmailChange}></lightning-input>
+            <lightning-input type="tel" label="Phone" value={phone} onchange={handlePhoneChange}></lightning-input>
+            <lightning-button class="slds-m-top_medium" label="Submit" onclick={handleSubmit}></lightning-button>
+        </div>
+    </lightning-card>
 </template>

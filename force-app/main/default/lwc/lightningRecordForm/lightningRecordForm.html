@@ -1,0 +1,13 @@
+<template>
+    <lightning-card title="Opportunity Form" icon-name="standard:opportunity">
+        <div class="form-container">
+            <lightning-record-form
+                object-api-name="Opportunity"
+                fields={fields}
+                mode="edit"
+                columns="2"
+                onsuccess={handleSuccess}>
+            </lightning-record-form>
+        </div>
+    </lightning-card> 
+</template>

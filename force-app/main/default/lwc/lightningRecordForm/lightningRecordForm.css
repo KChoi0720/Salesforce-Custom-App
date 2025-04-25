@@ -1,5 +1,19 @@
-.form-container {
-    padding: 1rem;
-    background-color: #f9f9f9;
-    border-radius: 0.5rem;
+/* Custom styles for form fields alignment */
+form .slds-form-element__label {
+    text-align: left;
+}
+
+form .slds-col {
+    text-align: left;
+}
+
+/* Button container styles */
+.button-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+button {
+    margin: 0 10px;
 }

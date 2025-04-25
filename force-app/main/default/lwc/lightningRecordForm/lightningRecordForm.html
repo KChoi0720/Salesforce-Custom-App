@@ -1,6 +1,7 @@
 <template>
-    <lightning-card title="Opportunity Form" icon-name="standard:opportunity">
+    <lightning-card title="Contact Form" icon-name="standard:contact">
         <div class="form-container">
+            <!-- lightning-record-form component -->
             <lightning-record-form
                 object-api-name="Opportunity"
                 fields={fields}
@@ -9,5 +10,11 @@
                 onsuccess={handleSuccess}>
             </lightning-record-form>
         </div>
-    </lightning-card> 
+
+        <!-- Custom buttons for Save and Cancel -->
+        <div class="button-container">
+            <lightning-button variant="neutral" label="Cancel" onclick={handleCancel}></lightning-button>
+            <lightning-button variant="brand" label="Save" onclick={handleSave}></lightning-button>
+        </div>
+    </lightning-card>
 </template>

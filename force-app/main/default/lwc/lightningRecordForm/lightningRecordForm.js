@@ -13,3 +13,4 @@ export default class LightningRecordForm extends LightningElement {
         this.dispatchEvent(evt);
     }
 }
+

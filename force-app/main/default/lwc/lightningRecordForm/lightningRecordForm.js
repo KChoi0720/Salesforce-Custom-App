@@ -1,4 +1,6 @@
 import { LightningElement } from 'lwc';
+import { ShowToastEvent } from 'lightning/platformShowToastEvent';
+
 
 export default class LightningRecordForm extends LightningElement {
     fields = ['Name', 'Amount', 'ContactId', 'StageName', 'CloseDate', 'Phone', 'Email']

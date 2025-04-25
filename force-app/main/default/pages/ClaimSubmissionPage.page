@@ -29,7 +29,8 @@
 
         <!-- Attach Supporting Documents -->
         <apex:facet name="header">Attach Documents</apex:facet>
-        <apex:inputFile value="{!fileToUpload}" label="Supporting Documents"/>
+        <apex:outputLabel for="fileUpload">Supporting Documents</apex:outputLabel>
+        <apex:inputFile value="{!fileToUpload}" id="fileUpload"/>
 
         <!-- Submit Button -->
         <apex:commandButton value="Submit" action="{!submitClaim}" />

@@ -1,5 +1,5 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
-    <fullName>Description__c</fullName>
+    <fullName>Insurance_Claim__c.Description__c</fullName>
     <label>Description</label>
     <type>TextArea</type>
   </CustomField>

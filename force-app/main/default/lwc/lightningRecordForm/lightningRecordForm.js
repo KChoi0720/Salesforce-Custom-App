@@ -2,6 +2,7 @@ import { LightningElement } from 'lwc';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 
 export default class LightningRecordForm extends LightningElement {
+    // Specify fields that belong to the Contact object
     fields = ['Name', 'Amount', 'ContactId', 'StageName', 'CloseDate', 'Phone', 'Email'];
 
     handleSuccess(event) {
@@ -11,15 +12,5 @@ export default class LightningRecordForm extends LightningElement {
             variant: "success"
         });
         this.dispatchEvent(evt);
-    }
-
-    handleCancel() {
-        // Define your cancel logic here (e.g., navigate away or reset the form)
-        console.log('Cancel clicked');
-    }
-
-    handleSave() {
-        // Handle save logic if necessary
-        console.log('Save clicked');
     }
 }

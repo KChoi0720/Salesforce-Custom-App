@@ -1,7 +1,7 @@
 import { LightningElement, track } from 'lwc';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import { createRecord } from 'lightning/uiRecordApi';
-import POLICY_OBJECT from '@salesforce/schema/Policy_c';
+import POLICY_OBJECT from '@salesforce/schema/Policy_c__c';
 
 export default class PolicyForm extends LightningElement {
     @track policyHolder = '';

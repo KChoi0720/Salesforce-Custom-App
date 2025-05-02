@@ -1,0 +1,9 @@
+/* blueNavBar.css */
+.navbar {
+    background-color: #0070d2; /* Salesforce blue */
+    color: white;
+    padding: 10px;
+    display: flex;
+    gap: 20px;
+  }
+  

@@ -1,0 +1,40 @@
+<apex:page>
+    <apex:includeScript value="/analytics/v1/js/embeddedAnalytics.js"/>
+
+    <style>
+        .dashboard-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: space-between;
+        }
+
+        .dashboard-box {
+            width: 48%;
+            height: 400px;
+            border: 1px solid #ddd;
+            padding: 10px;
+            box-shadow: 2px 2px 5px #ccc;
+        }
+
+        .dashboard-box iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+    </style>
+
+    <h2>Embedded Dashboards</h2>
+
+    <div class="dashboard-container">
+        <div class="dashboard-box">
+            <analytics:dashboard dashboardId="01ZdL000004GcJxUAK" height="400px" />
+        </div>
+        <div class="dashboard-box">
+            <analytics:dashboard dashboardId="01ZdL000004GWG9UAO" height="400px" />
+        </div>
+        <div class="dashboard-box">
+            <analytics:dashboard dashboardId="01ZdL000004CoYDUA0" height="400px" />
+        </div>
+    </div>
+</apex:page>

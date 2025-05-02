@@ -12,9 +12,9 @@ export default class PolicyForm extends LightningElement {
 
     policyTypeOptions = [
         { label: 'Auto', value: 'Auto' },
-        { label: 'Home', value: 'Home' },
-        { label: 'Life', value: 'Life' },
-        { label: 'Health', value: 'Health' }
+        { label: 'House', value: 'House' },
+        { label: 'Contents', value: 'Contents' },
+        { label: 'Car', value: 'Car' }
     ];
 
     handlePolicyHolderChange(event) {

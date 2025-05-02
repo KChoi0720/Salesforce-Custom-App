@@ -10,6 +10,7 @@ export default class PolicyForm extends LightningElement {
     @track endDate = '';
     @track premiumAmount = '';
 
+    // modify new label and value
     policyTypeOptions = [
         { label: 'Auto', value: 'Auto' },
         { label: 'House', value: 'House' },

@@ -16,33 +16,42 @@ jobs:
       - name: Checkout source code
         uses: actions/checkout@v3
         with:
-          fetch-depth: 2
+          fetch-depth: 2  #Checks out the latest code from GitHub, compare the last two commits
 
+      # Sets up the Node.js environment (version 18), required for LWC, Prettier, ESLint, and test scripts
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '18'
 
+      # Installs all Node.js dependencies defined in the package.json
       - name: Install dependencies
         run: npm install
 
+      # Ensures code follows formatting rules defined by Prettier.
       - name: Run Prettier (verify)
         run: npm run prettier:verify
 
+      # Lints the code to detect and prevent bugs, bad practices, or code style violations
       - name: Run ESLint
         run: npm run lint
 
+      # Runs unit tests for Lightning Web Components and checks test coverage to ensure the components are well-tested.
       - name: Run LWC unit tests with coverage
         run: npm run test:unit:coverage
 
+      # Installs the Salesforce CLI globally, which is used to run Salesforce-related commands
       - name: Install Salesforce CLI
         run: npm install @salesforce/cli --global
 
+      # compares git commits and generates a delta, speeding up deployments by pushing only changed files
       - name: Install sfdx-git-delta plugin
         run: |
           echo Y | sfdx plugins:install sfdx-git-delta
           sfdx plugins
 
+      # Compares latest and previous commits, Outputs only the changed files into the changed-sources/ folder 
+      # to prepare for a smaller and faster deployment.
       - name: Create delta packages
         run: |
           mkdir changed-sources

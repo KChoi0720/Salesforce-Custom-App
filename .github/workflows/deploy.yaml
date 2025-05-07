@@ -58,6 +58,8 @@ jobs:
           sf sgd source delta --to "HEAD" --from "HEAD~1" --output changed-sources/ --generate-delta --source force-app/
           echo "[INFO] Diff generated"
 
+      # Authenticates to Salesforce using JWT (JSON Web Token) without needing to store user passwords.
+      # Uses secure GitHub Secrets
       - name: Authenticate to Salesforce using JWT
         run: |
           echo "${{ secrets.JWT_SERVER_KEY }}" > server.key
@@ -68,6 +70,8 @@ jobs:
             --instance-url ${{ vars.INSTANCE_URL }} \
             --set-default
 
+      # Deploys only the changed metadata (delta package) to the target Salesforce org.
+      # Runs local tests (unit tests in Salesforce) to validate changes.
       - name: Deploy delta package to Salesforce
         run: |
           sf project deploy start \

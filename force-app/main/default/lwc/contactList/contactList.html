@@ -1,0 +1,25 @@
+<template>
+    <lightning-card title="Contact List" icon-name="standard:contact">
+        <div class="slds-p-horizontal_medium">
+            <lightning-input
+                type="text"
+                label="Search Contacts"
+                value={searchKey}
+                onchange={handleSearchKeyChange}>
+            </lightning-input>
+
+            <template if:true={filteredContacts.length}>
+                <ul class="slds-m-top_medium">
+                    <template for:each={filteredContacts} for:item="contact">
+                        <li key={contact.Id}>
+                            {contact.Name} — {contact.Email}
+                        </li>
+                    </template>
+                </ul>
+            </template>
+            <template if:false={filteredContacts.length}>
+                <p class="slds-m-top_medium">No contacts found.</p>
+            </template>
+        </div>
+    </lightning-card>
+</template>

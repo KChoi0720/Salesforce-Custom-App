@@ -25,8 +25,11 @@ jobs:
           node-version: '18'
 
       # Installs all Node.js dependencies defined in the package.json
+      # - name: Install dependencies
+      #   run: npm install
       - name: Install dependencies
-        run: npm install
+        run: npm install --legacy-peer-deps
+
 
       # Ensures code follows formatting rules defined by Prettier.
       - name: Run Prettier (verify)

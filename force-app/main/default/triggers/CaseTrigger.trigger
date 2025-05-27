@@ -1,9 +1,16 @@
 trigger CaseTrigger on Case (before insert, before update) {
 
     // define each queue Id
-    Id highUrgencyQueueId = '00GdL00000CeOPh';
-    Id mediumUrgencyQueueId = '00GdL00000CeORJ';
-    Id lowUrgencyQueueId = '00GdL00000CeSWX';
+    // Id highUrgencyQueueId = '00GdL00000CeOPh';
+    // Id mediumUrgencyQueueId = '00GdL00000CeORJ';
+    // Id lowUrgencyQueueId = '00GdL00000CeSWX';
+    Id highUrgencyQueueId = [SELECT Id FROM Group WHERE Name = 'High Urgency Queue' LIMIT 1].Id;
+    caseRecord.OwnerId = highUrgencyQueueId;
+    Id mediumUrgencyQueueId = [SELECT Id FROM Group WHERE Name = 'Medium Urgency Queue' LIMIT 1].Id;
+    caseRecord.OwnerId = mediumUrgencyQueueId;
+    Id lowUrgencyQueueId = [SELECT Id FROM Group WHERE Name = 'Low Urgency Queue' LIMIT 1].Id;
+    caseRecord.OwnerId = lowUrgencyQueueId;
+
 
     for (Case c : Trigger.new) {
         if (c.Urgency__c == 'High' && c.Issue_Type__c == 'Onboarding') {

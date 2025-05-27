@@ -28,7 +28,8 @@ public class CaseTriggerTest {
         // Reload the case from DB
         Case inserted = [SELECT Id, OwnerId, Urgency__c FROM Case WHERE Id = :highCase.Id];
         System.assertEquals('High', inserted.Urgency__c);
-        System.assertEquals('00GdL00000CeOPh', inserted.OwnerId); // Your actual High queue ID
+        Id expectedOwnerId = [SELECT Id FROM Group WHERE Name = 'High Urgency Queue' LIMIT 1].Id;
+        System.assertEquals(expectedOwnerId, inserted.OwnerId);
     }
 
     @isTest
@@ -42,7 +43,9 @@ public class CaseTriggerTest {
         insert mediumCase;
 
         Case inserted = [SELECT Id, OwnerId FROM Case WHERE Id = :mediumCase.Id];
-        System.assertEquals('00GdL00000CeORJ', inserted.OwnerId); // Medium queue ID
+        // System.assertEquals('00GdL00000CeORJ', inserted.OwnerId); // Medium queue ID
+        Id expectedOwnerId = [SELECT Id FROM Group WHERE Name = 'Medium Urgency Queue' LIMIT 1].Id;
+        System.assertEquals(expectedOwnerId, inserted.OwnerId);
     }
 
     @isTest
@@ -56,7 +59,9 @@ public class CaseTriggerTest {
         insert lowCase;
 
         Case inserted = [SELECT Id, OwnerId FROM Case WHERE Id = :lowCase.Id];
-        System.assertEquals('00GdL00000CeSWX', inserted.OwnerId); // Low queue ID
+        // System.assertEquals('00GdL00000CeSWX', inserted.OwnerId); // Low queue ID
+        Id expectedOwnerId = [SELECT Id FROM Group WHERE Name = 'Medium Urgency Queue' LIMIT 1].Id;
+        System.assertEquals(expectedOwnerId, inserted.OwnerId);
     }
 
     @isTest

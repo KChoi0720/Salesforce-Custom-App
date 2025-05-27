@@ -10,7 +10,7 @@ trigger CaseTrigger on Case (before insert, before update) {
             c.OwnerId = highUrgencyQueueId;
         } else if (c.Urgency__c == 'Medium' && c.Issue_Type__c = 'Onboarding') {
             c.OwnerId = mediumUrgencyQueueId;
-        } else (c.Urgency__c == 'Low' && c.Issue_Type__c = 'Onboarding') {
+        } else if (c.Urgency__c == 'Low' && c.Issue_Type__c = 'Onboarding') {
             c.OwnerId = lowUrgencyQueueId;
         }
 

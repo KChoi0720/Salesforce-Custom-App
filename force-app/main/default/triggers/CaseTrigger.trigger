@@ -24,4 +24,5 @@ trigger CaseTrigger on Case (before insert, before update) {
             Messaging.sendEmail(new Messaging.SingleEmailMessage[] {email});
         }
     }
+    
 }

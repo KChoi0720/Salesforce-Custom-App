@@ -20,7 +20,7 @@ trigger CaseTrigger on Case (before insert, before update) {
 
     for (Case c : Trigger.new) {
         // Assign OwnerId based on Urgency and Issue Type
-        if (c.Issue_Type__c == 'Onboarding') {
+        if (c.Issue_Type__c == 'Onboarding Issues') {
             if (c.Urgency__c == 'High') {
                 c.OwnerId = highUrgencyQueueId;
             } else if (c.Urgency__c == 'Medium') {

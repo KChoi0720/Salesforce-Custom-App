@@ -31,12 +31,12 @@ jobs:
         run: npm install --legacy-peer-deps
 
       # # Ensures code follows formatting rules defined by Prettier.
-      # - name: Run Prettier (verify)
-      #   run: npm run prettier:verify
+      - name: Run Prettier (verify)
+        run: npm run prettier:verify
 
       # # Lints the code to detect and prevent bugs, bad practices, or code style violations
-      # - name: Run ESLint
-        # run: npm run lint
+      - name: Run ESLint
+        run: npm run lint
 
       # Runs unit tests for Lightning Web Components and checks test coverage to ensure the components are well-tested.
       - name: Run LWC unit tests with coverage

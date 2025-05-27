@@ -1,7 +1,7 @@
 trigger CaseTrigger on Case (before insert, before update) {
 
     // Query Queue IDs once
-    List<Group> queues = [SELECT Id, Name FROM Group WHERE Name IN ('High Urgency Queue', 'Medium Urgency Queue', 'Low Urgency Queue')];
+    List<Group> queues = [SELECT Id, Name FROM Group WHERE Type = 'Queue' AND Name IN ('High Urgency Queue', 'Medium Urgency Queue', 'Low Urgency Queue')];
     Id highUrgencyQueueId;
     Id mediumUrgencyQueueId;
     Id lowUrgencyQueueId;

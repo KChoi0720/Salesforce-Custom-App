@@ -1,10 +1,10 @@
 trigger CaseTrigger on Case (before insert, before update) {
-    
-    // define each queue I
+
+    // define each queue Id
     Id highUrgencyQueueId = '00GdL00000CeOPh';
     Id mediumUrgencyQueueId = '00GdL00000CeORJ';
     Id lowUrgencyQueueId = '00GdL00000CeSWX';
-    
+
     for (Case c : Trigger.new) {
         if (c.Urgency__c == 'High' && c.Issue_Type__c == 'Onboarding') {
             c.OwnerId = highUrgencyQueueId;
@@ -20,9 +20,8 @@ trigger CaseTrigger on Case (before insert, before update) {
             email.setToAddresses(new String[] {'jipingcui0908@gmail.com'});
             email.setSubject('High Urgency Case Created');
             email.setPlainTextBody('A high urgency case has been created.\nCase ID: ' + c.Id +
-                                   '\nLink: ' + URL.getSalesforceBaseUrl().toExternalForm() + '/' + c.Id);
+                '\nLink: ' + System.URL.getOrgDomainUrl().toExternalForm() + '/' + c.Id);
             Messaging.sendEmail(new Messaging.SingleEmailMessage[] {email});
         }
     }
-
 }

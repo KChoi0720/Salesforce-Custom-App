@@ -6,11 +6,11 @@ trigger CaseTrigger on Case (before insert, before update) {
     Id lowUrgencyQueueId = '00GdL00000CeSWX';
     
     for (Case c : Trigger.new) {
-        if (c.Urgency__c == 'High' && c.Issue_Type__c = 'Onboarding') {
+        if (c.Urgency__c == 'High' && c.Issue_Type__c == 'Onboarding') {
             c.OwnerId = highUrgencyQueueId;
-        } else if (c.Urgency__c == 'Medium' && c.Issue_Type__c = 'Onboarding') {
+        } else if (c.Urgency__c == 'Medium' && c.Issue_Type__c == 'Onboarding') {
             c.OwnerId = mediumUrgencyQueueId;
-        } else if (c.Urgency__c == 'Low' && c.Issue_Type__c = 'Onboarding') {
+        } else if (c.Urgency__c == 'Low' && c.Issue_Type__c == 'Onboarding') {
             c.OwnerId = lowUrgencyQueueId;
         }
 

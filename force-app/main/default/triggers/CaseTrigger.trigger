@@ -18,6 +18,7 @@ trigger CaseTrigger on Case (before insert, before update) {
             lowUrgencyQueueId = q.Id;
         }
     }
+    
     // Prepare a list to hold email messages that will be sent for high urgency cases
     List<Messaging.SingleEmailMessage> emails = new List<Messaging.SingleEmailMessage>();
 

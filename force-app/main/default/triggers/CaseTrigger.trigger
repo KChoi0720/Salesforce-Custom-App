@@ -1,34 +1,48 @@
 trigger CaseTrigger on Case (before insert, before update) {
 
-    // define each queue Id
-    // Id highUrgencyQueueId = '00GdL00000CeOPh';
-    // Id mediumUrgencyQueueId = '00GdL00000CeORJ';
-    // Id lowUrgencyQueueId = '00GdL00000CeSWX';
-    Id highUrgencyQueueId = [SELECT Id FROM Group WHERE Name = 'High Urgency Queue' LIMIT 1].Id;
-    c.OwnerId = highUrgencyQueueId;
-    Id mediumUrgencyQueueId = [SELECT Id FROM Group WHERE Name = 'Medium Urgency Queue' LIMIT 1].Id;
-    c.OwnerId = mediumUrgencyQueueId;
-    Id lowUrgencyQueueId = [SELECT Id FROM Group WHERE Name = 'Low Urgency Queue' LIMIT 1].Id;
-    c.OwnerId = lowUrgencyQueueId;
+    // Query Queue IDs once
+    List<Group> queues = [SELECT Id, Name FROM Group WHERE Name IN ('High Urgency Queue', 'Medium Urgency Queue', 'Low Urgency Queue')];
+    Id highUrgencyQueueId;
+    Id mediumUrgencyQueueId;
+    Id lowUrgencyQueueId;
 
+    for (Group q : queues) {
+        if (q.Name == 'High Urgency Queue') {
+            highUrgencyQueueId = q.Id;
+        } else if (q.Name == 'Medium Urgency Queue') {
+            mediumUrgencyQueueId = q.Id;
+        } else if (q.Name == 'Low Urgency Queue') {
+            lowUrgencyQueueId = q.Id;
+        }
+    }
+
+    List<Messaging.SingleEmailMessage> emails = new List<Messaging.SingleEmailMessage>();
 
     for (Case c : Trigger.new) {
-        if (c.Urgency__c == 'High' && c.Issue_Type__c == 'Onboarding') {
-            c.OwnerId = highUrgencyQueueId;
-        } else if (c.Urgency__c == 'Medium' && c.Issue_Type__c == 'Onboarding') {
-            c.OwnerId = mediumUrgencyQueueId;
-        } else if (c.Urgency__c == 'Low' && c.Issue_Type__c == 'Onboarding') {
-            c.OwnerId = lowUrgencyQueueId;
+        // Assign OwnerId based on Urgency and Issue Type
+        if (c.Issue_Type__c == 'Onboarding') {
+            if (c.Urgency__c == 'High') {
+                c.OwnerId = highUrgencyQueueId;
+            } else if (c.Urgency__c == 'Medium') {
+                c.OwnerId = mediumUrgencyQueueId;
+            } else if (c.Urgency__c == 'Low') {
+                c.OwnerId = lowUrgencyQueueId;
+            }
         }
 
-        // Send email reminder if urgency is high
+        // Prepare email for high urgency cases
         if (c.Urgency__c == 'High') {
             Messaging.SingleEmailMessage email = new Messaging.SingleEmailMessage();
             email.setToAddresses(new String[] {'jipingcui0908@gmail.com'});
-            email.setSubject('High Urgency Case Created');
+            email.setSubject('High Urgency Case Created: ' + c.CaseNumber);
             email.setPlainTextBody('A high urgency case has been created.\nCase ID: ' + c.Id +
                 '\nLink: ' + System.URL.getOrgDomainUrl().toExternalForm() + '/' + c.Id);
-            Messaging.sendEmail(new Messaging.SingleEmailMessage[] {email});
+            emails.add(email);
         }
+    }
+
+    // Send all emails
+    if (!emails.isEmpty()) {
+        Messaging.sendEmail(emails);
     }
 }

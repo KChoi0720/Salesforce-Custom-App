@@ -1,99 +1,111 @@
 @isTest
-public class CaseTriggerTest {
+private class CaseTriggerTest {
 
-    @testSetup
-    static void setupQueues() {
-        // Create 3 dummy queues (Groups) with known IDs for testing
-        Group highQueue = new Group(Name = 'High Urgency Queue', Type = 'Queue');
-        Group mediumQueue = new Group(Name = 'Medium Urgency Queue', Type = 'Queue');
-        Group lowQueue = new Group(Name = 'Low Urgency Queue', Type = 'Queue');
-        insert new List<Group>{highQueue, mediumQueue, lowQueue};
+    @TestSetup
+    static void setup() {
+        // Create test queues
+        List<Group> queues = new List<Group>{
+            new Group(Name='High Urgency Queue', Type='Queue'),
+            new Group(Name='Medium Urgency Queue', Type='Queue'),
+            new Group(Name='Low Urgency Queue', Type='Queue')
+        };
+        insert queues;
 
-        // Can manually assign the IDs if you use hardcoded ones for testing
-        System.debug('Setup complete');
+        // Link queues to Case object
+        List<QueueSObject> queueSObjects = new List<QueueSObject>();
+        for (Group q : queues) {
+            queueSObjects.add(new QueueSObject(
+                SobjectType = 'Case',
+                QueueId = q.Id
+            ));
+        }
+        insert queueSObjects;
     }
 
     @isTest
     static void testHighUrgencyOnboardingCase() {
-        Case highCase = new Case(
-            Subject = 'Test High Urgency',
-            Urgency__c = 'High',
-            Issue_Type__c = 'Onboarding'
-        );
-
+        Group highQueue = [SELECT Id FROM Group WHERE Name = 'High Urgency Queue' LIMIT 1];
+        
         Test.startTest();
-        insert highCase;
+        Case testCase = new Case(
+            Issue_Type__c = 'Onboarding',
+            Urgency__c = 'High',
+            Subject = 'High Urgency Test'
+        );
+        insert testCase;
         Test.stopTest();
 
-        // Reload the case from DB
-        Case inserted = [SELECT Id, OwnerId, Urgency__c FROM Case WHERE Id = :highCase.Id];
-        System.assertEquals('High', inserted.Urgency__c);
-        Id expectedOwnerId = [SELECT Id FROM Group WHERE Name = 'High Urgency Queue' LIMIT 1].Id;
-        System.assertEquals(expectedOwnerId, inserted.OwnerId);
+        Case insertedCase = [SELECT OwnerId FROM Case WHERE Id = :testCase.Id];
+        System.assertEquals(highQueue.Id, insertedCase.OwnerId, 'Case should be assigned to High Urgency Queue');
+        System.assertEquals(1, Limits.getEmailInvocations(), 'An email should be sent for High Urgency');
     }
 
     @isTest
     static void testMediumUrgencyOnboardingCase() {
-        Case mediumCase = new Case(
-            Subject = 'Test Medium Urgency',
+        Group mediumQueue = [SELECT Id FROM Group WHERE Name = 'Medium Urgency Queue' LIMIT 1];
+        
+        Case testCase = new Case(
+            Issue_Type__c = 'Onboarding',
             Urgency__c = 'Medium',
-            Issue_Type__c = 'Onboarding'
+            Subject = 'Medium Urgency Test'
         );
+        insert testCase;
 
-        insert mediumCase;
-
-        Case inserted = [SELECT Id, OwnerId FROM Case WHERE Id = :mediumCase.Id];
-        // System.assertEquals('00GdL00000CeORJ', inserted.OwnerId); // Medium queue ID
-        Id expectedOwnerId = [SELECT Id FROM Group WHERE Name = 'Medium Urgency Queue' LIMIT 1].Id;
-        System.assertEquals(expectedOwnerId, inserted.OwnerId);
+        Case insertedCase = [SELECT OwnerId FROM Case WHERE Id = :testCase.Id];
+        System.assertEquals(mediumQueue.Id, insertedCase.OwnerId, 'Case should be assigned to Medium Urgency Queue');
     }
 
     @isTest
     static void testLowUrgencyOnboardingCase() {
-        Case lowCase = new Case(
-            Subject = 'Test Low Urgency',
+        Group lowQueue = [SELECT Id FROM Group WHERE Name = 'Low Urgency Queue' LIMIT 1];
+        
+        Case testCase = new Case(
+            Issue_Type__c = 'Onboarding',
             Urgency__c = 'Low',
-            Issue_Type__c = 'Onboarding'
+            Subject = 'Low Urgency Test'
         );
+        insert testCase;
 
-        insert lowCase;
-
-        Case inserted = [SELECT Id, OwnerId FROM Case WHERE Id = :lowCase.Id];
-        // System.assertEquals('00GdL00000CeSWX', inserted.OwnerId); // Low queue ID
-        Id expectedOwnerId = [SELECT Id FROM Group WHERE Name = 'Medium Urgency Queue' LIMIT 1].Id;
-        System.assertEquals(expectedOwnerId, inserted.OwnerId);
+        Case insertedCase = [SELECT OwnerId FROM Case WHERE Id = :testCase.Id];
+        System.assertEquals(lowQueue.Id, insertedCase.OwnerId, 'Case should be assigned to Low Urgency Queue');
     }
 
     @isTest
-    static void testNonOnboardingCaseNoAssignment() {
-        Case c = new Case(
-            Subject = 'General Issue',
-            Urgency__c = 'Medium',
-            Issue_Type__c = 'Other'
-        );
-
-        insert c;
-
-        Case inserted = [SELECT Id, OwnerId FROM Case WHERE Id = :c.Id];
-        // OwnerId will not be updated if Issue_Type__c ≠ 'Onboarding'
-        System.assertNotEquals('00GdL00000CeORJ', inserted.OwnerId);
-    }
-
-    @isTest
-    static void testEmailSendForHighUrgency() {
-        // Set up email sending mock
-        Test.startTest();
-
-        Case highCase = new Case(
-            Subject = 'High Urgency Email Test',
+    static void testNonOnboardingCase() {
+        // Assuming default owner is a user (e.g., current user)
+        User currentUser = [SELECT Id FROM User WHERE Id = :UserInfo.getUserId()];
+        
+        Case testCase = new Case(
+            Issue_Type__c = 'Other',
             Urgency__c = 'High',
-            Issue_Type__c = 'Onboarding'
+            Subject = 'Non-Onboarding Test'
         );
-        insert highCase;
+        insert testCase;
 
+        Case insertedCase = [SELECT OwnerId FROM Case WHERE Id = :testCase.Id];
+        System.assertEquals(currentUser.Id, insertedCase.OwnerId, 'Non-Onboarding Case should retain default owner');
+    }
+
+    @isTest
+    static void testUpdateCaseUrgency() {
+        Group highQueue = [SELECT Id FROM Group WHERE Name = 'High Urgency Queue' LIMIT 1];
+        Group mediumQueue = [SELECT Id FROM Group WHERE Name = 'Medium Urgency Queue' LIMIT 1];
+        
+        Case testCase = new Case(
+            Issue_Type__c = 'Onboarding',
+            Urgency__c = 'Medium',
+            Subject = 'Update Test'
+        );
+        insert testCase;
+        System.assertEquals(mediumQueue.Id, [SELECT OwnerId FROM Case WHERE Id = :testCase.Id].OwnerId);
+
+        Test.startTest();
+        testCase.Urgency__c = 'High';
+        update testCase;
         Test.stopTest();
 
-        // System debug can be used to confirm or use Limits.getEmailInvocations()
-        System.assertEquals(1, Limits.getEmailInvocations(), 'Expected 1 email to be sent');
+        Case updatedCase = [SELECT OwnerId FROM Case WHERE Id = :testCase.Id];
+        System.assertEquals(highQueue.Id, updatedCase.OwnerId, 'Updated Case should be assigned to High Urgency Queue');
+        System.assertEquals(1, Limits.getEmailInvocations(), 'Email should be sent after update to High Urgency');
     }
 }

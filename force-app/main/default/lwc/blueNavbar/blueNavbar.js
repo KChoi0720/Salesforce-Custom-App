@@ -2,3 +2,4 @@
 import { LightningElement } from 'lwc';
 
 export default class BlueNavBar extends LightningElement {}
+//test

@@ -1,10 +1,54 @@
-<apex:page controller="MyAccountController" >
-    <apex:pageBlock title="My Accounts">
-    	<apex:pageBlockTable value="{!accountList}" var="item">
-            <apex:column value="{!item.Id}" />
-            <apex:column value="{!item.name}" />
-            <apex:column value="{!item.Website}" />
-                   <!-- test -->
+<apex:page controller="MyAccountController">
+
+    <apex:pageBlock title="📊 Sales Dashboard">
+
+        <!-- ====== 数据表格 ====== -->
+        <apex:pageBlockTable value="{!salesList}" var="row">
+
+            <apex:column headerValue="Product">
+                {!row.productName}
+            </apex:column>
+
+            <apex:column headerValue="Quantity">
+                {!row.quantity}
+            </apex:column>
+
+            <apex:column headerValue="Revenue ($)">
+                {!row.revenue}
+            </apex:column>
+
+            <apex:column headerValue="Cost ($)">
+                {!row.cost}
+            </apex:column>
+
+            <apex:column headerValue="Profit ($)">
+                {!row.profit}
+            </apex:column>
+
         </apex:pageBlockTable>
+
+        <br/>
+
+        <!-- ====== 收入柱状图 ====== -->
+        <apex:chart data="{!salesList}" height="300" width="600">
+            <apex:legend position="right"/>
+            <apex:barSeries valueField="revenue"
+                            labelField="productName"
+                            title="Revenue by Product"/>
+            <apex:axis type="Numeric" position="left" title="Revenue"/>
+            <apex:axis type="Category" position="bottom" title="Product"/>
+        </apex:chart>
+
+        <br/>
+
+        <!-- ====== 利润饼图 ====== -->
+        <apex:chart data="{!salesList}" height="300" width="600">
+            <apex:legend position="right"/>
+            <apex:pieSeries valueField="profit"
+                            labelField="productName"
+                            title="Profit Distribution"/>
+        </apex:chart>
+
     </apex:pageBlock>
+
 </apex:page>

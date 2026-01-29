@@ -9,27 +9,27 @@ public with sharing class MyAccountController {
             SELECT Id,
                    Quantity,
                    TotalPrice,
-                   PricebookEntry.Product2.Name,
-                   Cost__c
+                   PricebookEntry.Product2.Name
             FROM OpportunityLineItem
-            LIMIT 20
+            LIMIT 10
         ];
 
         for (OpportunityLineItem i : items) {
-            Decimal cost = i.Cost__c == null ? 0 : i.Cost__c;
-            Decimal profit = i.TotalPrice - cost;
+            Decimal revenue = i.TotalPrice == null ? 0 : i.TotalPrice;
+            Decimal cost = 0;      // 如果你没有成本字段，先写死 0
+            Decimal profit = revenue - cost;
 
             salesList.add(new SalesRow(
                 i.PricebookEntry.Product2.Name,
                 i.Quantity,
-                i.TotalPrice,
+                revenue,
                 cost,
                 profit
             ));
         }
     }
 
-    // Wrapper class
+    // ===== Wrapper =====
     public class SalesRow {
         public String productName { get; set; }
         public Decimal quantity { get; set; }
